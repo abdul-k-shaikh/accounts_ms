@@ -11,6 +11,5 @@ public class AccountsDto {
 	
 	private String email;
 	
-	
 	private String branchAddress;
 }
