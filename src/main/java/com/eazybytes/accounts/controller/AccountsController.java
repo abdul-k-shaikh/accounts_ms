@@ -20,8 +20,9 @@ public class AccountsController {
 	@PostMapping("/create")
 	public ResponseEntity<ResponseDto>createAccount(@RequestBody CustomerDto customerDto){
 		return ResponseEntity
-				.status(HttpStatus.CREATED)
+				.status(HttpStatus.CREATED) //line 23 at header level status created 
 				.body(new ResponseDto(AccountsConstants.STATUS_201, AccountsConstants.MESSAGE_201));
+		        
 		
 	}
 	
