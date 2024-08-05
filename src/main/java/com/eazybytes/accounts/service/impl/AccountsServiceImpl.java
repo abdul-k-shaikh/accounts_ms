@@ -90,12 +90,23 @@ public class AccountsServiceImpl implements IAccountsService {
 			Long customerId = accounts.getCustomerId();
 			Customer customer = customerRepository.findById(customerId)
 					.orElseThrow(() -> new ResourceNotFoundException("Customer", "CustomerId", customerId.toString()));
-			//dto to customer i.e. entity
+			// dto to customer i.e. entity
 			CustomerMapper.mapToCustomer(customerDto, customer);
 			customerRepository.save(customer);
-			isUpdated=true;
+			isUpdated = true;
 		}
 		return isUpdated;
+	}
+
+	@Override
+	public boolean deleteAccount(String mobileNumber) {
+		Customer customer = customerRepository.findByMobileNumber(mobileNumber)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+						);
+		accountsRepository.deleteByCustomerId(customer.getCustomerId());
+		customerRepository.deleteById(customer.getCustomerId());
+
+		return true;
 	}
 
 }

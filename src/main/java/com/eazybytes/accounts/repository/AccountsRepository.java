@@ -3,12 +3,19 @@ package com.eazybytes.accounts.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import com.eazybytes.accounts.entity.Accounts;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface AccountsRepository extends JpaRepository<Accounts, Long> {
 
-	 Optional<Accounts> findByCustomerId(Long customerId);
+	Optional<Accounts> findByCustomerId(Long customerId);
+
+	@Transactional  //here deleting the resources so if any issue, then it will rollback
+	@Modifying
+	void deleteByCustomerId(Long customerId);
 }

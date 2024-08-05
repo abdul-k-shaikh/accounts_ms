@@ -13,6 +13,27 @@ import com.eazybytes.accounts.dto.ErrorResponseDto;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
+	/**
+	 * this checks all other runtime exceptions
+	 * @param exception
+	 * @param webRequeste
+	 * @return
+	 */
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponseDto>handleGlobalException(Exception exception,
+	 WebRequest webRequeste){
+		
+		ErrorResponseDto errorResposneDTO = new ErrorResponseDto(
+				webRequeste.getDescription(false), 
+				HttpStatus.INTERNAL_SERVER_ERROR, 
+				exception.getMessage(), 
+				LocalDateTime.now()
+				);
+		
+		return new ResponseEntity<ErrorResponseDto>(errorResposneDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		
+	}
+	
 	@ExceptionHandler(CustomerAlreadyExistsException.class)
 	public ResponseEntity<ErrorResponseDto>handleCustomerAlredyExistException(CustomerAlreadyExistsException exception,
 	 WebRequest webRequeste){
