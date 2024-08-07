@@ -37,8 +37,8 @@ public class AccountsServiceImpl implements IAccountsService {
 					"Customer Alredy registered with given mobile number " + customerDto.getMobileNumber());
 		}
 
-		customer.setCreatedAt(LocalDateTime.now());
-		customer.setCreatedBy("Anonymous");
+//		customer.setCreatedAt(LocalDateTime.now()); Achieving this by jpa auditing
+//		customer.setCreatedBy("Anonymous");
 		Customer savedCustomer = customerRepository.save(customer);
 		accountsRepository.save(createNewAccount(savedCustomer));
 	}
@@ -55,8 +55,8 @@ public class AccountsServiceImpl implements IAccountsService {
 		newAccount.setAccountNumber(randomAccNumber);
 		newAccount.setAccountType(AccountsConstants.SAVINGS);
 		newAccount.setBranchAddress(AccountsConstants.ADDRESS);
-		newAccount.setCreatedAt(LocalDateTime.now());
-		newAccount.setCreatedBy("Anonymous");
+//		newAccount.setCreatedAt(LocalDateTime.now());  achiving this by jpa auditing
+//		newAccount.setCreatedBy("Anonymous");
 		return newAccount;
 	}
 
