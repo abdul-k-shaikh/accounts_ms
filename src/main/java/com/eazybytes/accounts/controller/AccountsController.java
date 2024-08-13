@@ -51,7 +51,8 @@ public class AccountsController {
 	}
 
 	@Operation(summary = "Fetch Account REST API", description = "REST API to create new customer & Account inside EazyBank")
-	@ApiResponse(responseCode = "200", description = "HTTP Status ok")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status ok"),
+			@ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error") })
 	@GetMapping("/fetch")
 	public ResponseEntity<CustomerDto> fetchAccountDetails(
 			@RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "mobile number must 10 digits") String mobileNumber) {
@@ -62,7 +63,8 @@ public class AccountsController {
 
 	@Operation(summary = "Update Account REST API", description = "REST API to create new customer & Account inside EazyBank")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status Created"),
-			@ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content=@Content(schema=@Schema(implementation=ErrorResponseDto.class))) })
+		    @ApiResponse(responseCode = "417", description = "Expectation Failed"),
+			@ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
 	@PutMapping("/update")
 	public ResponseEntity<ResponseDto> updateAccountDetails(@Valid @RequestBody CustomerDto cusotomerDto) {
 		boolean isUpdated = iAccountsService.updateAccount(cusotomerDto);
@@ -70,8 +72,8 @@ public class AccountsController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(new ResponseDto(AccountsConstants.STATUS_500, AccountsConstants.MESSAGE_500));
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+					.body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_500));
 
 		}
 	}
@@ -87,8 +89,8 @@ public class AccountsController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(new ResponseDto(AccountsConstants.STATUS_500, AccountsConstants.MESSAGE_500));
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+					.body(new ResponseDto(AccountsConstants.MESSAGE_417_DELETE, AccountsConstants.MESSAGE_500));
 
 		}
 
