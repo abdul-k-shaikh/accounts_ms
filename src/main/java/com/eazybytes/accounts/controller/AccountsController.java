@@ -121,7 +121,7 @@ public class AccountsController {
 			@ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
 	@GetMapping("/java-version")
 	public ResponseEntity<String> getJavaVersion() {
-		return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("MAVEN_HOME"));
+		return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
 	}
 
 }
