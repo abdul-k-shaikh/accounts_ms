@@ -1,7 +1,9 @@
 package com.eazybytes.accounts.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,17 +30,27 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
+
+/**
+ * @author AbdulShaikh
+ */
 
 @Tag(name = "CRUD REST APIS for Accounts MS in EazyBank", description = "CRUD REST APIs in EazyBank to create, update, delete and fetch account details")
 @RestController
 @RequestMapping(path = "/api", produces = { MediaType.APPLICATION_JSON_VALUE })
-@AllArgsConstructor
 @Validated
 public class AccountsController {
+	private final IAccountsService iAccountsService;
 
-//	@Autowired  here @AllArgsConstructor is helping , we comment this it will show 500
-	private IAccountsService iAccountsService;
+	public AccountsController(IAccountsService iAccountsService) {
+		this.iAccountsService = iAccountsService;
+	}
+
+	@Value("${build.version}")
+	private String buildVersion;
+
+	@Autowired
+	private Environment environment;
 
 	@Operation(summary = "Create Account REST API", description = "REST API to create new customer & Account inside EazyBank")
 	@ApiResponse(responseCode = "201", description = "HTTP Status Created")
@@ -63,7 +75,7 @@ public class AccountsController {
 
 	@Operation(summary = "Update Account REST API", description = "REST API to create new customer & Account inside EazyBank")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status Created"),
-		    @ApiResponse(responseCode = "417", description = "Expectation Failed"),
+			@ApiResponse(responseCode = "417", description = "Expectation Failed"),
 			@ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
 	@PutMapping("/update")
 	public ResponseEntity<ResponseDto> updateAccountDetails(@Valid @RequestBody CustomerDto cusotomerDto) {
@@ -94,6 +106,22 @@ public class AccountsController {
 
 		}
 
+	}
+
+	@Operation(summary = "Get Build information", description = "Get Build information that is deployed into accounts microservice")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
+			@ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@GetMapping("/build-info")
+	public ResponseEntity<String> getBuildInfo() {
+		return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+	}
+
+	@Operation(summary = "Get Java version", description = "Get Java verson details that is installed into accounts microservice")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
+			@ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@GetMapping("/java-version")
+	public ResponseEntity<String> getJavaVersion() {
+		return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("MAVEN_HOME"));
 	}
 
 }
