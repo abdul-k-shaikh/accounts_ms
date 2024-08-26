@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eazybytes.accounts.constants.AccountsConstants;
+import com.eazybytes.accounts.dto.AccountsContactInfoDto;
 import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.dto.ErrorResponseDto;
 import com.eazybytes.accounts.dto.ResponseDto;
@@ -51,6 +52,9 @@ public class AccountsController {
 
 	@Autowired
 	private Environment environment;
+
+	@Autowired
+	private AccountsContactInfoDto accountsContactInfoDto;
 
 	@Operation(summary = "Create Account REST API", description = "REST API to create new customer & Account inside EazyBank")
 	@ApiResponse(responseCode = "201", description = "HTTP Status Created")
@@ -122,6 +126,14 @@ public class AccountsController {
 	@GetMapping("/java-version")
 	public ResponseEntity<String> getJavaVersion() {
 		return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
+	}
+
+	@Operation(summary = "Get Contact Info", description = "Contact Info details that can be reached out in case of any issues")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
+			@ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@GetMapping("/contact-info")
+	public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+		return ResponseEntity.status(HttpStatus.OK).body(accountsContactInfoDto);
 	}
 
 }
