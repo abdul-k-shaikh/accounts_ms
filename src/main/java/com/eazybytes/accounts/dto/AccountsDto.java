@@ -20,8 +20,6 @@ public class AccountsDto {
 	@Schema(description = "Account type of Eazy Bank account", example = "Savings")
 	private String accountType;
 	
-//	private String email;
-	
 	@NotEmpty(message="branchAddress can not be a null or empty")
 	@Schema(description = "Eazy Bank Branch address", example = "123 Mumbai")
 	private String branchAddress;

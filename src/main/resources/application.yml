@@ -47,4 +47,10 @@ info:
     description: "Eazy bank account application"
     version: "1.0.0"
 
+logging: 
+ level: 
+   com: 
+    eazybytes: 
+     accounts: DEBUG
+
 build.version: 3.0
